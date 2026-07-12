@@ -18,3 +18,8 @@ position in queue: 509
 ```
 
 Once the counter approaches 0 you can just turn off the idle client and switch to your real client.
+
+
+---
+
+:warning: this actually does not work lol, the queue will restart once you switch clients.
