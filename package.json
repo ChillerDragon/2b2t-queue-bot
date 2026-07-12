@@ -1,0 +1,25 @@
+{
+  "name": "2b2t-queue-bot",
+  "version": "0.0.1",
+  "description": "bot to wait in the 2b2t.org server queue",
+  "homepage": "https://github.com/ChillerDragon/2b2t-queue-bot#readme",
+  "bugs": {
+    "url": "https://github.com/ChillerDragon/2b2t-queue-bot/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChillerDragon/2b2t-queue-bot.git"
+  },
+  "license": "BSD-2-Clause",
+  "author": "ChillerDragon",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "mineflayer": "^4.37.1"
+  }
+}
