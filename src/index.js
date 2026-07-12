@@ -38,11 +38,34 @@ const getQueuePos = () => {
   return null
 }
 
+let queuePos = null
+
 const printQueuePos = () => {
   const pos = getQueuePos()
   console.log(`position in queue: ${pos}`)
+  queuePos = pos
 }
 
 setInterval(printQueuePos, 1000)
 
+const http = require("http")
 
+const webContent = () => {
+  const now = new Date()
+  const lastUpdate = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`
+  const lines = [
+    `last updated: ${lastUpdate}`,
+    `position in queue: ${queuePos}`
+  ]
+  return lines.join('\n')
+}
+
+const server = http.createServer((req, res) => {
+  res.write(webContent())
+  res.end()
+})
+
+const webPort = process.env.WEB_PORT ? parseInt(process.env.WEB_PORT, 10) : 8888
+server.listen((webPort), () => {
+  console.log(`web server running at http://localhost:${webPort}`)
+})
