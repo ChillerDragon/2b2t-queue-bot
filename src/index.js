@@ -49,8 +49,10 @@ const printQueuePos = () => {
 setInterval(printQueuePos, 1000)
 
 const http = require("http")
+const fs = require("fs")
+const path = require("path")
 
-const webContent = () => {
+const webContentPlainText = () => {
   const now = new Date()
   const lastUpdate = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`
   const lines = [
@@ -60,9 +62,32 @@ const webContent = () => {
   return lines.join('\n')
 }
 
+const webContentHtml = (res) => {
+  const filePath = path.join(__dirname, "../web/index.html")
+  res.writeHead(200, { "Content-Type": "text/html" })
+  const readStream = fs.createReadStream(filePath)
+  readStream.pipe(res)
+}
+
+const serveJs = (res) => {
+  const filePath = path.join(__dirname, "../web/main.js")
+  res.writeHead(200, { "Content-Type": "text/javascript" })
+  const readStream = fs.createReadStream(filePath)
+  readStream.pipe(res)
+}
+
 const server = http.createServer((req, res) => {
-  res.write(webContent())
-  res.end()
+  if(req.url === '/api/pos') {
+    res.write(queuePos ? queuePos.toString() : 'null')
+    res.end()
+  } else if(req.url === '/main.js') {
+    serveJs(res)
+  } else if(req.url === '/') {
+    webContentHtml(res)
+  } else {
+    res.write('404 I AM A TEA POT')
+    res.end()
+  }
 })
 
 const webPort = process.env.WEB_PORT ? parseInt(process.env.WEB_PORT, 10) : 8888
