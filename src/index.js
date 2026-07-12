@@ -20,8 +20,16 @@ bot.on('chat', (username, message) => {
   console.log(`[chat] ${username}: ${message}`)
 })
 
-bot.on('kicked', console.log)
-bot.on('error', console.log)
+let latestError = null
+
+bot.on('kicked', (reason, _loggedIn) => {
+  console.log(reason)
+  latestError = reason
+})
+bot.on('error', (error) => {
+  console.log(error)
+  latestError = error.toString()
+})
 
 const getQueuePos = () => {
   const messages = bot.tablist.header.extra
@@ -79,6 +87,13 @@ const serveJs = (res) => {
 const server = http.createServer((req, res) => {
   if(req.url === '/api/pos') {
     res.write(queuePos ? queuePos.toString() : 'null')
+    res.end()
+  } else if(req.url === '/api/status') {
+    const statusObj = {}
+    if(latestError) {
+      statusObj["error"] = latestError
+    }
+    res.write(JSON.stringify(statusObj))
     res.end()
   } else if(req.url === '/main.js') {
     serveJs(res)
